@@ -1,6 +1,6 @@
+
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 
 
@@ -14,7 +14,9 @@ class UserProfileManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, name=name)
 
-        user.set_password(password) #enkrypt password as hash
+        # user.set_password(password)
+        if password:
+            user.set_password(password) #enkrypt password as hash
         user.save(using=self._db) ## saving obj in django
 
         return user
@@ -24,7 +26,7 @@ class UserProfileManager(BaseUserManager):
         user = self.create_user(email, name, password)
 
         user.is_superuser= True #dziedziczony z PermissionsMixin
-        user.is_stuff= True
+        user.is_staff= True
         user.save(using=self._db)
 
         return user
